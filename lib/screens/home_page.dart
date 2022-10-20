@@ -68,13 +68,14 @@ class _HomeState extends State<HomePage> {
                 margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
                   controller: _todoController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Add a new ToDo item',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               )),
@@ -142,22 +143,22 @@ class _HomeState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         color: Theme.of(context).backgroundColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: TextField(
         onChanged: (value) => _runFilter(value),
         decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 16),
-            prefixIcon: Icon(
-              Icons.search,
-              color: Theme.of(context).cardColor,
-              size: 20,
-            ),
-            prefixIconConstraints:
-                const BoxConstraints(maxHeight: 20, minWidth: 25),
-            border: InputBorder.none,
-            hintText: "Search Your ToDos",
-            hintStyle: TextStyle(color: Theme.of(context).cardColor)),
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          prefixIcon: Icon(
+            Icons.search,
+            color: Theme.of(context).cardColor,
+            size: 20,
+          ),
+          prefixIconConstraints:
+              const BoxConstraints(maxHeight: 20, minWidth: 25),
+          border: InputBorder.none,
+          hintText: "Search Your ToDos",
+        ),
       ),
     );
   }

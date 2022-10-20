@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:to_do_lists/screens/home_page.dart';
-import 'package:to_do_lists/screens/login_page.dart';
+import 'package:to_do_lists/screens/login/login_page.dart';
 import 'package:to_do_lists/themes/theme_constant.dart';
 
 void main() {

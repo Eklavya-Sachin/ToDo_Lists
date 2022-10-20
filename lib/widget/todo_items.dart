@@ -24,7 +24,7 @@ class ToDoItem extends StatelessWidget {
           onToDoChanged(todoo);
         },
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
         tileColor: Theme.of(context).backgroundColor,

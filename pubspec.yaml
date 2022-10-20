@@ -28,6 +28,11 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+flutter_native_splash:
+  image: assets/images/logo.png
+  color: "FFFFFF"
+
+
 dependencies:
   flutter:
     sdk: flutter
@@ -38,6 +43,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   material_design_icons_flutter: ^5.0.6996
   shared_preferences: ^2.0.15
+  flutter_native_splash: ^2.2.11
 
 dev_dependencies:
   flutter_test:
