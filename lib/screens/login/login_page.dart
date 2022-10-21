@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,12 +9,38 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // final _usernameController = TextEditingController();
-  // final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future signIn() async {
+     await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim());
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   final formKey = GlobalKey<FormState>();
   String username = '';
   String password = '';
+
+  String? validateEmail(String? value) {
+    String? pattern =
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+        r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+        r"{0,253}[a-zA-Z0-9])?)*$";
+    RegExp regex = RegExp(pattern);
+    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
+      return 'Enter a valid email address';
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,53 +83,47 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           TextFormField(
+            controller: _emailController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (value) => setState(() => username = (value)),
-            validator: (value) {
-              if (value!.length < 4) {
-                return "Enter at least 4 charaters";
-              } else {
-                return null;
-              }
-            },
-            // controller: _usernameController,
-            decoration: const InputDecoration(
-              bott
-              border: OutlineInputBorder(),
+            validator: ((value) => validateEmail(value)),
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent),
-              ),
-              errorStyle: TextStyle(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(12)),
+              errorStyle: const TextStyle(color: Colors.blueAccent),
               focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent),
-              ),
-              hintText: "Enter your Username",
-              labelText: 'Username',
+                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(12)),
+              hintText: "Enter your email",
+              labelText: 'Email',
             ),
           ),
           const SizedBox(height: 20),
           TextFormField(
+            controller: _passwordController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-
             onChanged: (value) => setState(() => password = (value)),
             validator: (value) {
               if (value!.length < 7) {
-                return "Password must be greater than 7 characters";
+                return "Password must be 7 characters long!";
               } else {
                 return null;
               }
             },
-            // controller: _passwordController,
             obscureText: true,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent),
-              ),
-              errorStyle: TextStyle(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(12)),
+              errorStyle: const TextStyle(color: Colors.blueAccent),
               focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent),
-              ),
+                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(12)),
               hintText: "Enter your Password",
               labelText: 'Password',
             ),
@@ -123,10 +143,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-              final isValid = formKey.currentState!.validate();
-              // Navigator.pushNamed(context, '/home');
-            },
+            onPressed: signIn,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
             ),
