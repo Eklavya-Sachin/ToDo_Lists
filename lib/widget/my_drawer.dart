@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_lists/screens/trash.dart';
 import 'package:to_do_lists/screens/reminder.dart';
@@ -44,9 +45,14 @@ class MyDrawer extends StatelessWidget {
             leading: Icon(Icons.settings_outlined),
             title: Text("Settings"),
           ),
-          const ListTile(
-            leading: Icon(MdiIcons.helpCircleOutline),
-            title: Text("Help & Feedback"),
+          TextButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            child: const ListTile(
+              leading: Icon(MdiIcons.logout),
+              title: Text("Sign Out"),
+            ),
           ),
         ],
       ),

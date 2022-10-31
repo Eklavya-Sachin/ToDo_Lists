@@ -1,34 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginPage({Key? key, required this.showRegisterPage}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
+  const RegisterPage({Key? key, required this.showLoginPage}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  Future logIn() async {
-    if (formKey.currentState!.validate()) {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
-    }
-  }
-
+  final _comfirmPasswordController = TextEditingController();
+  
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _comfirmPasswordController.dispose();
     super.dispose();
   }
 
   final formKey = GlobalKey<FormState>();
+
+  Future signUp() async {
+    if (formKey.currentState!.validate()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
+    }
+  }
 
   String? validateEmail(String? value) {
     String? pattern =
@@ -50,18 +52,11 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: ListView(children: [
           const SizedBox(
-            height: 50,
-          ),
-          const Icon(
-            Icons.android,
-            size: 150,
-          ),
-          const SizedBox(
-            height: 10,
+            height: 150,
           ),
           const Center(
             child: Text(
-              'HELLO AGAIN!',
+              'HELLO THERE!',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ),
@@ -70,14 +65,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const Center(
             child: Text(
-              "Welcome Back, you've been Missed!",
+              "Create Your Account Here!",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
               ),
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 50,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -101,11 +96,11 @@ class _LoginPageState extends State<LoginPage> {
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.amber),
                   borderRadius: BorderRadius.circular(12)),
-              errorStyle: const TextStyle(color: Colors.blueAccent),
+              errorStyle: const TextStyle(color: Colors.amber),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.amber),
                   borderRadius: BorderRadius.circular(12)),
               hintText: "Enter your email",
               labelText: 'Email',
@@ -115,8 +110,8 @@ class _LoginPageState extends State<LoginPage> {
           TextFormField(
             controller: _passwordController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value) {
-              if (value!.length < 7) {
+            validator: (value1) {
+              if (value1!.length < 7) {
                 return "Password must be 7 characters long!";
               } else {
                 return null;
@@ -127,41 +122,56 @@ class _LoginPageState extends State<LoginPage> {
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.amber),
                   borderRadius: BorderRadius.circular(12)),
-              errorStyle: const TextStyle(color: Colors.blueAccent),
+              errorStyle: const TextStyle(color: Colors.amber),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderSide: const BorderSide(color: Colors.amber),
                   borderRadius: BorderRadius.circular(12)),
               hintText: "Enter your Password",
               labelText: 'Password',
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 200),
-            child: Text(
-              'Forget Password?',
-              style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline),
+          const SizedBox(height: 20),
+          TextFormField(
+            controller: _comfirmPasswordController,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value!.length < 7 ) {
+                return "Password should be match";
+              } else {
+                return null;
+              }
+            },
+            obscureText: true,
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.amber),
+                  borderRadius: BorderRadius.circular(12)),
+              errorStyle: const TextStyle(color: Colors.amber),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.amber),
+                  borderRadius: BorderRadius.circular(12)),
+              hintText: "Confirm Password",
+              labelText: 'Confirm Password',
             ),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: logIn,
+            onPressed: signUp,
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18)))),
+              backgroundColor: MaterialStateProperty.all(Colors.amberAccent),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              ),
+            ),
             child: const SizedBox(
               height: 60,
               child: Center(
                 child: Text(
-                  'LOGIN',
+                  'Sign Up',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -175,20 +185,20 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Not a member?',
+                'I am a member!',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               TextButton(
-                onPressed: widget.showRegisterPage,
+                onPressed: widget.showLoginPage,
                 child: const Text(
-                  ' Register now',
+                  'Login now',
                   style: TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.bold),
+                      color: Colors.amberAccent, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10)
+          const SizedBox(height: 20)
         ],
       ),
     );
