@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../widget/my_drawer.dart';
+import '../../widget/my_drawer.dart';
 
 class Reminder extends StatelessWidget {
   const Reminder({Key? key}) : super(key: key);

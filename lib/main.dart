@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:to_do_lists/auth/main_page.dart';
+import 'package:to_do_lists/screens/drawer_screen/setting.dart';
+import 'package:to_do_lists/screens/home_page.dart';
+import 'package:to_do_lists/screens/drawer_screen/reminder.dart';
+import 'package:to_do_lists/screens/drawer_screen/trash.dart';
 import 'package:to_do_lists/themes/theme_constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -25,13 +29,18 @@ class MyApp extends StatelessWidget {
       title: "ToDo Lists",
       debugShowCheckedModeBanner: false,
       home: const MainPage(),
-      // routes: {
-      //   "/login": (context) => const LoginPage(
-      //         showRegisterPage: () {},
-      //       ),
-      //   "/home": (context) => const HomePage(),
-      // "/register": (context) => const RegisterPage(),
-      // },
+      routes: {
+        MyRoutes.reminder: (context) => const Reminder(),
+        MyRoutes.setting: (context) => SettingScreen(),
+        MyRoutes.trash: (context) => const Trash(),
+        "/home": (context) => const HomePage(),
+      },
     );
   }
+}
+
+class MyRoutes {
+  static String reminder = "/reminder";
+  static String trash = "/trash";
+  static String setting = "/setting";
 }

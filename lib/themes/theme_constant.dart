@@ -6,7 +6,7 @@ class MyTheme {
     brightness: Brightness.light,
     cardColor: tdBlack,
     dividerColor: tdRed,
-    backgroundColor: const Color(0xFFF9F5ED),
+    backgroundColor: const Color(0xFFf2f2f2),
     scaffoldBackgroundColor: tdBgColor,
     colorScheme: const ColorScheme.light(primary: tdBlack),
     primaryColor: tdBgColor,
@@ -19,7 +19,7 @@ class MyTheme {
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
     cardColor: Colors.white,
-    backgroundColor: const Color(0xff323639),
+    backgroundColor: const Color(0xFF323639),
     dividerColor: const Color(0xff03203C),
     scaffoldBackgroundColor: tdGrey,
     colorScheme: const ColorScheme.dark(primary: tdBgColor),

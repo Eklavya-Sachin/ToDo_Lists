@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do_lists/screens/trash.dart';
-import 'package:to_do_lists/screens/reminder.dart';
+import 'package:to_do_lists/main.dart';
+import 'package:to_do_lists/screens/drawer_screen/trash.dart';
 import 'package:to_do_lists/widget/rich_text.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -26,13 +26,8 @@ class MyDrawer extends StatelessWidget {
             leading: const Icon(MdiIcons.bellOutline),
             title: const Text("Reminders"),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Reminder()));
+              Navigator.pushNamed(context, MyRoutes.reminder);
             },
-          ),
-          const ListTile(
-            leading: Icon(Icons.archive_outlined),
-            title: Text("Archive"),
           ),
           ListTile(
               leading: const Icon(MdiIcons.trashCanOutline),
@@ -41,18 +36,39 @@ class MyDrawer extends StatelessWidget {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Trash()));
               }),
-          const ListTile(
-            leading: Icon(Icons.settings_outlined),
-            title: Text("Settings"),
-          ),
-          TextButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, MyRoutes.setting);
             },
-            child: const ListTile(
-              leading: Icon(MdiIcons.logout),
-              title: Text("Sign Out"),
-            ),
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text("Settings"),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            children: [
+              const Padding(
+                  padding: EdgeInsets.symmetric(
+                horizontal: 3,
+              )),
+              IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: const Icon(Icons.logout),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 17),
+                child: GestureDetector(
+                  onTap: () => FirebaseAuth.instance.signOut(),
+                  child: const Text(
+                    'Sign Out',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ),
+              )
+            ],
           ),
         ],
       ),

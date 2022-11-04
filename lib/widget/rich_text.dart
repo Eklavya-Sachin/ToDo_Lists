@@ -10,43 +10,31 @@ class WidgetRichText extends StatelessWidget {
       text: TextSpan(
         children: [
           const TextSpan(
-              text: 'S',
+              text: 'T',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: tdBlueGoogle)),
           const TextSpan(
-              text: 'a',
+              text: 'o',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: tdRedGoogle)),
           const TextSpan(
-              text: 'c',
+              text: 'D',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: tdYellowGoogle)),
           const TextSpan(
-              text: 'h',
+              text: 'o',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: tdBlueGoogle)),
-          const TextSpan(
-              text: 'i',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: tdGreenGoogle)),
-          const TextSpan(
-              text: 'n',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: tdRedGoogle)),
           TextSpan(
-              text: ' Keep',
+              text: ' Lists',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,35 +14,52 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _comfirmPasswordController = TextEditingController();
-  
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _ageController = TextEditingController();
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _comfirmPasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
   final formKey = GlobalKey<FormState>();
 
   Future signUp() async {
-    if (formKey.currentState!.validate()) {
+    if (passwordComfirm() && formKey.currentState!.validate()) {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
     }
+    addUserDetial(
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _emailController.text.trim(),
+        int.parse(_ageController.text.trim()));
   }
 
-  String? validateEmail(String? value) {
-    String? pattern =
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-        r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-        r"{0,253}[a-zA-Z0-9])?)*$";
-    RegExp regex = RegExp(pattern);
-    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
-      return 'Enter a valid email address';
+  Future addUserDetial(
+      String firstName, String lastName, String email, int age) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'email': email,
+      'age ': age
+    });
+  }
+
+  bool passwordComfirm() {
+    if (_passwordController.text.trim() ==
+        _comfirmPasswordController.text.trim()) {
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 
@@ -52,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         body: ListView(children: [
           const SizedBox(
-            height: 150,
+            height: 50,
           ),
           const Center(
             child: Text(
@@ -61,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           const Center(
             child: Text(
@@ -72,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(
-            height: 50,
+            height: 30,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -89,83 +107,164 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Column(
         children: [
           TextFormField(
-            controller: _emailController,
+            controller: _firstNameController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value) => validateEmail(value),
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'This field is Required!';
+              } else {
+                return null;
+              }
+            },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
               errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.amber),
-                  borderRadius: BorderRadius.circular(12)),
-              errorStyle: const TextStyle(color: Colors.amber),
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              errorStyle: TextStyle(color: Colors.amber),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.amber),
-                  borderRadius: BorderRadius.circular(12)),
-              hintText: "Enter your email",
-              labelText: 'Email',
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              hintText: "Enter your First Name",
+              labelText: 'First Name',
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
+          TextFormField(
+            controller: _lastNameController,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // validator: (value) {
+            //   if (value!.isEmpty) {
+            //     return "!";
+            //   } else {
+            //     return null;
+            //   }
+            // },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              errorStyle: TextStyle(color: Colors.amber),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              hintText: "Enter your Last Name",
+              labelText: 'Last Name',
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            controller: _ageController,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "This field is Required!";
+              } else {
+                return null;
+              }
+            },
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              errorStyle: TextStyle(color: Colors.amber),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              hintText: "Enter your Age",
+              labelText: 'Age',
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            controller: _emailController,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              const pattern =
+                  r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                  r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                  r"{0,253}[a-zA-Z0-9])?)*$";
+              final regexp = RegExp(pattern);
+              if (value == null || value.isEmpty || !regexp.hasMatch(value)) {
+                return 'Enter a valid email address';
+              } else {
+                return null;
+              }
+            },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              errorStyle: TextStyle(color: Colors.amber),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              hintText: "Enter your email ID",
+              labelText: 'Email ID',
+            ),
+          ),
+          const SizedBox(height: 10),
           TextFormField(
             controller: _passwordController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value1) {
-              if (value1!.length < 7) {
-                return "Password must be 7 characters long!";
+            validator: (value) {
+              if (value!.length < 6) {
+                return "Password must be 6 characters long!";
               } else {
                 return null;
               }
             },
             obscureText: true,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
               errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.amber),
-                  borderRadius: BorderRadius.circular(12)),
-              errorStyle: const TextStyle(color: Colors.amber),
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              errorStyle: TextStyle(color: Colors.amber),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.amber),
-                  borderRadius: BorderRadius.circular(12)),
+                borderSide: BorderSide(color: Colors.amber),
+              ),
               hintText: "Enter your Password",
               labelText: 'Password',
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           TextFormField(
             controller: _comfirmPasswordController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (value!.length < 7 ) {
-                return "Password should be match";
+              if (value!.length < 6) {
+                return "Password should match";
               } else {
                 return null;
               }
             },
             obscureText: true,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
               errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.amber),
-                  borderRadius: BorderRadius.circular(12)),
-              errorStyle: const TextStyle(color: Colors.amber),
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              errorStyle: TextStyle(color: Colors.amber),
               focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.amber),
-                  borderRadius: BorderRadius.circular(12)),
-              hintText: "Confirm Password",
+                borderSide: BorderSide(color: Colors.amber),
+              ),
+              hintText: "Confirm your password",
               labelText: 'Confirm Password',
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           ElevatedButton(
             onPressed: signUp,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.amberAccent),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-              ),
+              // shape: MaterialStateProperty.all(
+              //   RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              // ),
             ),
             child: const SizedBox(
               height: 60,
@@ -173,27 +272,27 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Text(
                   'Sign Up',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Color.fromRGBO(255, 255, 255, 1),
                       fontSize: 17,
                       fontWeight: FontWeight.w500),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'I am a member!',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                'Already have an account?',
+                style: TextStyle(fontWeight: FontWeight.w400),
               ),
-              TextButton(
-                onPressed: widget.showLoginPage,
+              GestureDetector(
+                onTap: widget.showLoginPage,
                 child: const Text(
-                  'Login now',
+                  ' Login here',
                   style: TextStyle(
-                      color: Colors.amberAccent, fontWeight: FontWeight.bold),
+                      color: Colors.amberAccent, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
