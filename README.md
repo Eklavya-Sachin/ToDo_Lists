@@ -1,6 +1,6 @@
 # ToDo Lists 
 
-A ToDo list app with login and register screen function.
+A ToDo list app with login and register screen function created by firebase.
 
 ## Getting Started
 
