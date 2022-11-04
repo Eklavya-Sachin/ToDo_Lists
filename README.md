@@ -1,6 +1,6 @@
 # ToDo Lists 
 
-A new Flutter project.
+A ToDo list app with login and register screen function.
 
 ## Getting Started
 
